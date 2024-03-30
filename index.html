@@ -9,17 +9,46 @@
     <style type="text/tailwindcss">
         @layer components{
             .searchBar{
-                @apply w-[150px] block   rounded-lg border border-gray-200 bg-white px-5 py-4 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40  ;
-
+                @apply w-[150px] block rounded-lg border border-gray-200 bg-white px-5 py-4 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40  ;
             }
             .searchButton{
                 @apply  disabled:opacity-25 px-6 py-2 text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80;            
             }
             .dogCard{
-                @apply w-[300px] h-[300px] border border-indigo-700 text-indigo-800;
+                @apply w-[250px] h-[500px] m-[5px] border border-indigo-700 rounded-lg text-indigo-800 flex flex-wrap justify-center items-center;
             }
             .pagesButtons{
                 @apply w-[50px] h-[50px] border border-indigo-400;
+            }
+            .dogImg{
+                @apply w-full h-[200px] object-cover flex items-center justify-center rounded-t-lg;
+            }
+            .dogImg>img{
+                @apply w-[240px] border border-black border-[2px] rounded-lg;
+            }
+            .dogName{
+                @apply text-xl;
+            }
+            .stats{
+                @apply flex flex-wrap items-center justify-center w-full h-[250px];
+            }
+            .statBar{
+                @apply w-[200px] h-[40px] border border-black border-[3px] rounded-full flex bg-[#cbd5e1];
+            }
+            .statLevels1{
+                @apply w-[39px] h-[34px] bg-gradient-to-r from-[#b91c1c] from-60% to-[#f97316] rounded-l-full relative;
+            }
+            .statLevels2{
+                @apply w-[39px] h-[34px] bg-gradient-to-r from-[#f97316] from-50% to-[#facc15];
+            }
+            .statLevels3{
+                @apply w-[39px] h-[34px] bg-gradient-to-r from-[#facc15] from-70% to-[#84cc16];
+            }
+            .statLevels4{
+                @apply w-[39px] h-[34px] bg-gradient-to-r from-[#84cc16] from-70% to-[#3f6212];
+            }
+            .statLevels5{
+                @apply w-[39px] h-[34px] bg-gradient-to-r from-[#3f6212] to-[#365314] to-40% rounded-r-full relative;
             }
         }
     </style>
@@ -27,14 +56,54 @@
 
 <body>
     <div class="border flex justify-center gap-2 items-center p-2">
-        <input class="myInput w-[250px]" type="text" placeholder="add meg az autó márkáját">
-        <button class="myBtn">list cars</button>
+        <input class="searchBar w-[250px]" type="text" placeholder="írd ide a kutyafajtát">
+        <button class="searchButton">show dogs</button>
     </div>
-    <div class="cars-list flex flex-wrap"></div>
+    <div class="cars-list flex flex-wrap justify-center">
+        <div class="dogCard">
+            <div class="dogImg">
+                <img src="" class="" alt="">
+            </div>
+            <div class="stats">
+                <div class="dogName"></div>
+                <div>
+                    <div class="statName">Energy</div>
+                    <div class="statBar">
+                        <div class="statLevels1"></div>
+                        <div class="statLevels2"></div>
+                        <div class="statLevels3"></div>
+                        <div class="statLevels4"></div>
+                        <div class="statLevels5"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="statName">Defense</div>
+                    <div class="statBar">
+                        <div class="statLevels1"></div>
+                        <div class="statLevels2"></div>
+                        <div class="statLevels3"></div>
+                        <div class="statLevels4"></div>
+                        <div class="statLevels5"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="statName">Intelligence</div>
+                    <div class="statBar">
+                        <div class="statLevels1"></div>
+                        <div class="statLevels2"></div>
+                        <div class="statLevels3"></div>
+                        <div class="statLevels4"></div>
+                        <div class="statLevels5"></div>
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+    </div>
 
     <div class="pagination flex justify-center gap-2 mt-4"></div>
    
-
     <script type="module" src="main.js"></script>
 </body>
 
