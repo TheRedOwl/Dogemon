@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dogemon</title>
+    <link rel="icon" type="image/x-icon" href="/dog-solid.svg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.tailwindcss.com"></script>
     <style type="text/tailwindcss">
@@ -54,27 +55,50 @@
             .statLevels5{
                 @apply w-[39px] h-[34px] bg-gradient-to-r from-[#3f6212] to-[#365314] to-40% rounded-r-full relative;
             }
+
+            /*login*/
+
+            .myInput{
+                @apply w-[150px] block   rounded-lg border border-gray-200 bg-white px-5 py-4 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40  ;
+
+            }
+            .myBtn{
+                @apply  disabled:opacity-25 px-6 py-2 text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80;            
+            }
+            .myCard{
+                @apply w-[300px] h-[300px] border border-indigo-700 text-indigo-800;
+            }
+            .page-btn{
+                @apply w-[50px] h-[50px] border border-indigo-400;
+            }
         }
     </style>
 </head>
 
 <body>
     <div class="border flex justify-center gap-2 items-center p-2">
-        <input class="searchBar w-[250px]" type="text" placeholder="írd ide a kutyafajtát">
-        <button class="searchButton">show dogs</button>
+        <input class="searchBar hidden w-[250px]" type="text" placeholder="írd ide a kutyafajtát">
+        <button class="searchButton hidden">show dogs</button>
+        <div class="loginRegister flex justify-center gap-2 items-center p-2">
+            <button class="myBtn logoutBtn hidden" title="username">Logout</button>
+        </div>
+       <div id="message-container"></div>
     </div>
     <div class="cars-list flex flex-wrap justify-center">
-        
+        <input class="myInput w-[250px] hidden"  type="text" id="username" placeholder="Username">
+        <input class="myInput w-[250px] hidden"  type="password" id="pw" placeholder="Password">
+        <button class="myBtn loginBtn">Login</button>
+        <button class="myBtn registerBtn">Register</button>
     </div>
 
-    <div class="pagination hidden flex justify-center gap-2 mt-4">
+    <div class="pagination hidden justify-center gap-2 mt-4">
         <button class="firstPage"><i class="fa-solid fa-angles-left"></i></button>
         <button class="previousPage"><i class="fa-solid fa-chevron-left"></i></button>
         <div class="pages flex gap-2"></div>
         <button class="nextPage"><i class="fa-solid fa-chevron-right"></i></button>
         <button class="lastPage"><i class="fa-solid fa-angles-right"></i></button>
     </div>
-   
+    
     <script type="module" src="main.js"></script>
 </body>
 
