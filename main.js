@@ -9,9 +9,14 @@ let totalPage = 1
 let cars
 let dogNumber = 1
 let carsToShow
+let previousSearch = ""
+let Breed
 
 function listData() {
-    let Breed = document.querySelector("input").value
+    if(document.querySelector(".searchBar").value!=""){
+        Breed = document.querySelector("input").value
+    }
+    previousSearch = Breed
     const url = `https://api.api-ninjas.com/v1/dogs?name=${Breed}`
     fetchData(url, renderData)
 }
@@ -22,11 +27,12 @@ function renderData(data) {
     showCars()
 }
 
-function showCars() {
+export function showCars() {
     document.querySelector(".cars-list").innerHTML = ""
     document.querySelector(".searchBar").placeholder = "írd ide a kutyafajtát"
     let startIndex = (page - 1) * pageSize
     let endIndex = startIndex + pageSize
+    localStorage.setItem("prevSearch",previousSearch)
     carsToShow = cars.slice(startIndex, endIndex)
     carsToShow.forEach(obj => {
         document.querySelector(".cars-list").innerHTML += `
@@ -171,7 +177,9 @@ function lastPage() {
 }
 
 
+
 //login
+
 
 
 import { verifyAttr } from "./verifyAttr.js"
@@ -203,12 +211,19 @@ function auth(e){
         localStorage.setItem("users",JSON.stringify(users))
         document.querySelector("#message-container").innerHTML="Sikeres regisztráció, jelentkezz be!"
         setTimeout(msgDelete, 3000)
+        document.querySelectorAll(".myInput").forEach(obj=>{
+            obj.classList.add("hidden")
+            obj.value=""
+        })
     }
     else{//login esetén
         let invalidUser=users.find(obj=>obj.username==username && obj.pw==pw)
         if(invalidUser){
             document.querySelector("#message-container").innerHTML="Sikeres bejelentkezés!"
             setTimeout(msgDelete, 3000)
+            document.querySelectorAll(".myInput").forEach(obj=>{
+                obj.value=""
+            })
             document.querySelector(".logoutBtn").title=username
             document.querySelector(".searchBar").classList.remove("hidden")
             document.querySelector(".searchButton").classList.remove("hidden")
@@ -229,7 +244,14 @@ function verifyAuth(){
         document.querySelector(".loginBtn").classList.add("hidden")
         document.querySelector(".registerBtn").classList.add("hidden")
         document.querySelector(".logoutBtn").classList.remove("hidden")
+        let staySearch = localStorage.getItem("prevSearch")
         document.querySelector(".logoutBtn").addEventListener("click",logoutUser)
+        hideInputs()
+        document.querySelector(".searchBar").classList.remove("hidden")
+        document.querySelector(".searchButton").classList.remove("hidden")
+        Breed = staySearch
+        listData()
+        renderData()
     } else{
         console.log("Nincs felhasználó bejelentkezve");
     }
@@ -238,11 +260,14 @@ verifyAuth()
 
 function logoutUser(){
     localStorage.removeItem("authUser")
+    localStorage.removeItem("prevSearch")
     document.querySelector(".loginBtn").classList.remove("hidden")
     document.querySelector(".registerBtn").classList.remove("hidden")
     document.querySelector(".logoutBtn").classList.add("hidden")
     document.querySelector(".searchBar").classList.add("hidden")
     document.querySelector(".searchButton").classList.add("hidden")
+    document.querySelector(".cars-list").innerHTML=""
+    document.querySelector(".pagination").classList.add("hidden")
     document.querySelector("#message-container").innerHTML="Sikeresen kijelentkeztetve!"
     setTimeout(msgDelete, 3000)
     hideInputs()
