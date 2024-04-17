@@ -11,6 +11,7 @@ let dogNumber = 1
 let carsToShow
 let previousSearch = ""
 let Breed
+let currentPage = 1
 
 function listData() {
     if(document.querySelector(".searchBar").value!=""){
@@ -33,6 +34,8 @@ export function showCars() {
     let startIndex = (page - 1) * pageSize
     let endIndex = startIndex + pageSize
     localStorage.setItem("prevSearch",previousSearch)
+    currentPage = page
+    localStorage.setItem("currentPage",currentPage)
     carsToShow = cars.slice(startIndex, endIndex)
     carsToShow.forEach(obj => {
         document.querySelector(".cars-list").innerHTML += `
@@ -76,9 +79,10 @@ export function showCars() {
     if(carsToShow.length==0){
         document.querySelector(".searchBar").value = ""
         document.querySelector(".searchBar").placeholder = "Nincs találat"
+    }else{
+        document.querySelector(".pagination").classList.add("flex")
+        document.querySelector(".pagination").classList.remove("hidden")
     }
-    document.querySelector(".pagination").classList.remove("hidden")
-    document.querySelector(".pagination").classList.add("flex")
     renderPagination(cars.length)
 }
 
@@ -107,14 +111,19 @@ document.addEventListener("keydown", keydownEvent)
 
 function keydownEvent(key) {
     if (key.keyCode == 13) {
-        if (document.querySelector(".searchBar").value == "") {
-            document.querySelector(".searchBar").placeholder = "Nem ütöttél be semmit"
+        if(document.querySelector(".loginBtn").classList.contains("hidden")){
+            if (document.querySelector(".searchBar").value == "") {
+                document.querySelector(".searchBar").placeholder = "Nem ütöttél be semmit"
+            }
+            else {
+                page=1
+                listData()
+                document.querySelector(".searchBar").blur()
+            }
+        }else{
+            authLogin()
         }
-        else {
-            listData()
-            document.querySelector(".searchBar").blur()
-
-        }
+        
     }
 
     if (key.keyCode == 39) {
@@ -184,6 +193,92 @@ function lastPage() {
 
 import { verifyAttr } from "./verifyAttr.js"
 
+document.querySelector(".loginBtn").addEventListener("click",Loginclick)
+document.querySelector(".registerBtn").addEventListener("click",Loginclick)
+
+function Loginclick(e){
+    if(e.target.textContent=="Register"){
+        authRegist()
+    }else{
+        authLogin()
+    }
+}
+    function authLogin(){
+        if(document.querySelector(".myInput").classList.contains("hidden")){
+            document.querySelectorAll(".myInput").forEach(obj=>{
+                obj.classList.remove("hidden")
+            })
+            return
+        }
+        console.log(e.target.textContent);
+        let username=document.getElementById("username").value
+        let pw=document.getElementById("pw").value
+        let users= JSON.parse(localStorage.getItem("users")) || []
+        //register esetén
+        if(e.target.textContent=="Register"){
+            if(username.length==0 ||pw.length==0) return
+            //nem lehet 2 egyforma fh név
+            if(verifyAttr(users,"username",username)){
+                document.querySelector("#message-container").innerHTML="Foglalt felhasználónév";
+                setTimeout(msgDelete, 3000)
+                return
+            }
+            users.push({username,pw})
+            localStorage.setItem("users",JSON.stringify(users))
+            document.querySelector("#message-container").innerHTML="Sikeres regisztráció, jelentkezz be!"
+            setTimeout(msgDelete, 3000)
+            document.querySelectorAll(".myInput").forEach(obj=>{
+                obj.classList.add("hidden")
+                obj.value=""
+            })
+        }
+        else{//login esetén
+            let invalidUser=users.find(obj=>obj.username==username && obj.pw==pw)
+            if(invalidUser){
+                document.querySelector("#message-container").innerHTML="Sikeres bejelentkezés!"
+                setTimeout(msgDelete, 3000)
+                document.querySelectorAll(".myInput").forEach(obj=>{
+                    obj.value=""
+                })
+                document.querySelector(".logoutBtn").title=username
+                document.querySelector(".searchBar").classList.remove("hidden")
+                document.querySelector(".searchButton").classList.remove("hidden")
+                localStorage.setItem("authUser",username)
+                verifyAuth()
+                hideInputs()
+            }else{
+                document.querySelector("#message-container").innerHTML="Hibás jelszó vagy felhasználónév!"
+                setTimeout(msgDelete, 3000)
+            }
+            
+        }
+    }
+}
+
+function authLogin(){
+    let username=document.getElementById("username").value
+    let pw=document.getElementById("pw").value
+    let users= JSON.parse(localStorage.getItem("users")) || []
+    //login esetén
+        let invalidUser=users.find(obj=>obj.username==username && obj.pw==pw)
+        if(invalidUser){
+            document.querySelector("#message-container").innerHTML="Sikeres bejelentkezés!"
+            setTimeout(msgDelete, 3000)
+            document.querySelectorAll(".myInput").forEach(obj=>{
+                obj.value=""
+            })
+            document.querySelector(".logoutBtn").title=username
+            document.querySelector(".searchBar").classList.remove("hidden")
+            document.querySelector(".searchButton").classList.remove("hidden")
+            localStorage.setItem("authUser",username)
+            verifyAuth()
+            hideInputs()
+        }else{
+            document.querySelector("#message-container").innerHTML="Hibás jelszó vagy felhasználónév!"
+            setTimeout(msgDelete, 3000)
+        }
+}
+
 document.querySelector(".loginBtn").addEventListener("click",auth)
 document.querySelector(".registerBtn").addEventListener("click",auth)
 
@@ -245,13 +340,14 @@ function verifyAuth(){
         document.querySelector(".registerBtn").classList.add("hidden")
         document.querySelector(".logoutBtn").classList.remove("hidden")
         let staySearch = localStorage.getItem("prevSearch")
+        let stayPage = localStorage.getItem("currentPage")
         document.querySelector(".logoutBtn").addEventListener("click",logoutUser)
         hideInputs()
         document.querySelector(".searchBar").classList.remove("hidden")
         document.querySelector(".searchButton").classList.remove("hidden")
         Breed = staySearch
+        page=stayPage
         listData()
-        renderData()
     } else{
         console.log("Nincs felhasználó bejelentkezve");
     }
@@ -261,6 +357,7 @@ verifyAuth()
 function logoutUser(){
     localStorage.removeItem("authUser")
     localStorage.removeItem("prevSearch")
+    localStorage.setItem("currentPage",1)
     document.querySelector(".loginBtn").classList.remove("hidden")
     document.querySelector(".registerBtn").classList.remove("hidden")
     document.querySelector(".logoutBtn").classList.add("hidden")
