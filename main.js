@@ -210,6 +210,11 @@ function authRegist() {
     }
     let username = document.getElementById("username").value;
     let pw = document.getElementById("pw").value;
+    if(!verifyPassword(pw)){
+        document.querySelector("#message-container").innerHTML = "Legalább 6 kararakter hosszúnak kell lennie a jelszónak"
+        setTimeout(msgDelete, 3000);
+        return
+    }
     let users = JSON.parse(localStorage.getItem("users")) || [];
     //register esetén
     if (username.length == 0 || pw.length == 0) return;
@@ -262,6 +267,14 @@ function authLogin() {
         document.querySelector("#message-container").innerHTML =
             "Hibás jelszó vagy felhasználónév!";
         setTimeout(msgDelete, 3000);
+    }
+}
+
+export function verifyPassword(password){
+    if(password.length>=6){
+        return true
+    }else{
+        return false
     }
 }
 
