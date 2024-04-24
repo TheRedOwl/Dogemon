@@ -28,7 +28,7 @@ function renderData(data) {
     showCars();
 }
 
-export function showCars() {
+function showCars() {
     document.querySelector(".cars-list").innerHTML = "";
     document.querySelector(".searchBar").placeholder = "írd ide a kutyafajtát";
     let startIndex = (page - 1) * pageSize;
@@ -39,7 +39,7 @@ export function showCars() {
     carsToShow = cars.slice(startIndex, endIndex);
     carsToShow.forEach((obj) => {
         document.querySelector(".cars-list").innerHTML += `
-        <div class="dogCard">
+        <div class="dogCard szoveg">
             <div class="dogImg">
                 <img src="${obj.image_link}" class="" alt="">
             </div>
@@ -100,7 +100,7 @@ function renderPagination(totalItems) {
         button.textContent = i;
         button.classList.add("page-btn");
         if (i == page) {
-            button.classList.add("bg-indigo-600");
+            button.classList.add("bg-[#F29F05]");
         }
         document.querySelector(".pages").appendChild(button);
     }
