@@ -1,4 +1,4 @@
-import { fetchData } from "/fetchData.js";
+//import { fetchData } from "/fetchData.js";
 
 document.querySelector(".searchButton").addEventListener("click", listData);
 document.querySelector(".pages").addEventListener("click", handlePagination);
